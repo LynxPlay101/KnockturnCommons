@@ -37,6 +37,14 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>knockturn-public</id>
+            <name>internal snapshots</name>
+            <url>http://repo.knockturnmc.com/content/repositories/knockturn-public/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <resources>
