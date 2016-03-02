@@ -46,6 +46,7 @@
     </distributionManagement>
 
     <build>
+        <defaultGoal>clean package javadoc:jar</defaultGoal>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <resources>
             <resource>
