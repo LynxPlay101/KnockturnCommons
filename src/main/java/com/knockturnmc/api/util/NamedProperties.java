@@ -36,16 +36,16 @@ import java.util.Properties;
  * An example:
  * <pre>
  * <code>public class TestProperties extends NamedProperties {
- *     {@code @Property(value = "test")}
+ *     {@literal @Property(value = "test")}
  *      public int test;
  *
- *     {@code @Property(value = "defaulttest", defaultvalue = "-69")}
+ *     {@literal @Property(value = "defaulttest", defaultvalue = "-69")}
  *      public int defaulttest;
  *
- *     {@code @Property(value = "test.2")}
+ *     {@literal @Property(value = "test.2")}
  *      public String test2;
  *
- *     {@code @Property(value = "time.unit", type = TimeUnit.class)}
+ *     {@literal @Property(value = "time.unit", type = TimeUnit.class)}
  *      public TimeUnit timeUnit;
  * }</code></pre>
  * If a mapping was not found in the file, it will be created with the default value.

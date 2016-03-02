@@ -67,6 +67,7 @@ public final class ConfigurationUtils {
      * @param file the filename to create/load
      * @param datafolder the datafolder to use
      * @return the loaded/created file
+     * @throws IOException if something went wrong
      */
     public static File getConfigFile(ClassLoader classLoader, String file, File datafolder) throws IOException {
         File config = new File(datafolder, file);
@@ -97,6 +98,7 @@ public final class ConfigurationUtils {
      * @param classLoader the classloader to use for the default file
      * @param file the filename to create/load
      * @return the loaded/created file
+     * @throws IOException if something went wrong
      */
     public static File getConfigFile(ClassLoader classLoader, String file) throws IOException {
         return getConfigFile(classLoader, file, getDataFolder());
