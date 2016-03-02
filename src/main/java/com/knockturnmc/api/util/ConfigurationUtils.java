@@ -129,7 +129,7 @@ public final class ConfigurationUtils {
     public static <T extends NamedProperties> T loadConfiguration(ClassLoader classLoader, String filename, File datafolder, Class<? extends T> mapping) {
         try {
             File file = getConfigFile(classLoader, filename, datafolder);
-            Constructor<? extends T> constructor = mapping.getConstructor();
+            Constructor<? extends T> constructor = mapping.getDeclaredConstructor();
             constructor.setAccessible(true);
             T properties = constructor.newInstance();
             FileInputStream stream = new FileInputStream(file);
