@@ -49,8 +49,7 @@ public class NamedPropertiesTest {
         assertEquals(TimeUnit.DAYS, properties.timeUnit);
     }
 
-    public static class TestProperties extends NamedProperties {
-
+    private static class TestProperties extends NamedProperties {
         @Property(value = "test")
         public int test;
 
@@ -63,5 +62,4 @@ public class NamedPropertiesTest {
         @Property(value = "time.unit", type = TimeUnit.class)
         public TimeUnit timeUnit;
     }
-
 }

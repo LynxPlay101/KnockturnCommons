@@ -28,12 +28,27 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Marks a mapped field in a {@link NamedProperties} class.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Property {
+    /**
+     * The key of the property, for example: {@code key.to.my.value}
+     * @return the key
+     */
     String value();
 
+    /**
+     * The optional default value that is used if the key is not found
+     * @return the default value
+     */
     String defaultvalue() default "";
 
+    /**
+     * A mapped type that can be used for parsing the value. Note: this has to be an enum!
+     * @return the mapped type
+     */
     Class type() default Void.class;
 }

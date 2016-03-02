@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
  */
 public final class Utils {
 
-
     private static Pattern IP_PATTERN = Pattern.compile(
             "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +

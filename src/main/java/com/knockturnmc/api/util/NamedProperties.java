@@ -30,6 +30,28 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.Properties;
 
+/**
+ * Provides simple mapping solution for {@link Properties} based configuration.
+ * When the {@link Properties#load} method is invoked, the mapping will be applied to the class members
+ * An example:
+ * <pre>
+ * <code>public class TestProperties extends NamedProperties {
+ *     {@code @Property(value = "test")}
+ *      public int test;
+ *
+ *     {@code @Property(value = "defaulttest", defaultvalue = "-69")}
+ *      public int defaulttest;
+ *
+ *     {@code @Property(value = "test.2")}
+ *      public String test2;
+ *
+ *     {@code @Property(value = "time.unit", type = TimeUnit.class)}
+ *      public TimeUnit timeUnit;
+ * }</code></pre>
+ * If a mapping was not found in the file, it will be created with the default value.
+ * If no default value is present, it will be instatianted will the type's default value,
+ * for primitives this is {@code 0} or {@code false} and for objects this will be {@code null}
+ */
 public abstract class NamedProperties extends Properties {
 
     @Override

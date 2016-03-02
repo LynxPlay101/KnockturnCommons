@@ -26,12 +26,25 @@ package com.knockturnmc.api.util;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.util.Properties;
 
+/**
+ * Provides utilities for loading configurations and loading mapped {@link NamedProperties}
+ */
 public final class ConfigurationUtils {
 
     private ConfigurationUtils() {}
 
+    /**
+     * Loads a standard Java {@link Properties} file.
+     * If the desired file is not found, a file with the same name will be copied from the classpath to the datafolder.
+     * If no default file was found, an empty file will be created.
+     * @param classLoader the classloader to use for the default file
+     * @param file the filename to create/load
+     * @param datafolder the datafolder to use
+     * @return the loaded/created file
+     */
     public static Properties loadConfiguration(ClassLoader classLoader, String file, File datafolder) {
         try {
             File config = getConfigFile(classLoader, file, datafolder);
@@ -46,6 +59,15 @@ public final class ConfigurationUtils {
         return null;
     }
 
+    /**
+     * Loads a plain file.
+     * If the desired file is not found, a file with the same name will be copied from the classpath to the datafolder.
+     * If no default file was found in the classloader's classpath, an empty file will be created.
+     * @param classLoader the classloader to use for the default file
+     * @param file the filename to create/load
+     * @param datafolder the datafolder to use
+     * @return the loaded/created file
+     */
     public static File getConfigFile(ClassLoader classLoader, String file, File datafolder) throws IOException {
         File config = new File(datafolder, file);
         datafolder.mkdirs();
@@ -67,18 +89,47 @@ public final class ConfigurationUtils {
         return config;
     }
 
+
+    /**
+     * Loads a plain file.
+     * If the desired file is not found, a file with the same name will be copied from the classpath to the current working directory.
+     * If no default file was found in the classloader's classpath, an empty file will be created.
+     * @param classLoader the classloader to use for the default file
+     * @param file the filename to create/load
+     * @return the loaded/created file
+     */
     public static File getConfigFile(ClassLoader classLoader, String file) throws IOException {
         return getConfigFile(classLoader, file, getDataFolder());
     }
 
+    /**
+     * Loads a standard Java {@link Properties} file.
+     * If the desired file is not found, a file with the same name will be copied from the classpath to the current working directory.
+     * If no default file was found, an empty file will be created.
+     * @param classLoader the classloader to use for the default file
+     * @param file the filename to create/load
+     * @return the loaded/created file
+     */
     public static Properties loadConfiguration(ClassLoader classLoader, String file) {
         return loadConfiguration(classLoader, file, getDataFolder());
     }
 
+    /**
+     * Loads a mapped {@link Properties} file and applies the mapping provided by the {@link NamedProperties}.
+     * If the desired file was not found in the datafolder, a default file will be copied from the classpath.
+     * @param classLoader the classloader to use for the default file
+     * @param filename the filename
+     * @param datafolder the datafolder
+     * @param mapping the mapped file
+     * @param <T> the type of the mapped file
+     * @return the loaded configuration mapping
+     */
     public static <T extends NamedProperties> T loadConfiguration(ClassLoader classLoader, String filename, File datafolder, Class<? extends T> mapping) {
         try {
             File file = getConfigFile(classLoader, filename, datafolder);
-            T properties = mapping.newInstance();
+            Constructor<? extends T> constructor = mapping.getConstructor();
+            constructor.setAccessible(true);
+            T properties = constructor.newInstance();
             FileInputStream stream = new FileInputStream(file);
             properties.load(stream);
             stream.close();
@@ -94,10 +145,23 @@ public final class ConfigurationUtils {
         return null;
     }
 
+    /**
+     * Loads a mapped {@link Properties} file and applies the mapping provided by the {@link NamedProperties}.
+     * If the desired file was not found in the current working directory, a default file will be copied from the classpath.
+     * @param classLoader the classloader to use for the default file
+     * @param filename the filename
+     * @param mapping the mapped file
+     * @param <T> the type of the mapped file
+     * @return the loaded configuration mapping
+     */
     public static <T extends NamedProperties> T loadConfiguration(ClassLoader classLoader, String filename, Class<? extends T> mapping) {
         return loadConfiguration(classLoader, filename, getDataFolder(), mapping);
     }
 
+    /**
+     * Gets the current working directory, this is also the default datafolder for all methods in {@link ConfigurationUtils}
+     * @return the current working directory
+     */
     public static File getDataFolder() {
         return new File(System.getProperty("user.dir"));
     }
