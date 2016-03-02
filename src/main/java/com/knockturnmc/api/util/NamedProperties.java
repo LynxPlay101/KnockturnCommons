@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -88,13 +89,13 @@ public abstract class NamedProperties extends Properties {
             }
 
             if (property.type() != Void.class) {
-                field.set(instance, Enum.valueOf(property.type(), val));
+                field.set(instance, Objects.equals(val, "") ? null : Enum.valueOf(property.type(), val));
             } else {
                 switch (name) {
                     case "int":
                         int value;
                         try {
-                            value = Integer.parseInt(val);
+                            value = Integer.parseInt(Objects.equals(val, "") ? "0" : val);
                         } catch (NumberFormatException e) {
                             throw new RuntimeException("Invalid value for field " + property.value());
                         }
@@ -102,6 +103,9 @@ public abstract class NamedProperties extends Properties {
                         break;
                     case "java.lang.String":
                         field.set(instance, val);
+                        break;
+                    case "boolean":
+                        field.setBoolean(instance, Boolean.parseBoolean(val));
                         break;
                     default:
                         throw new RuntimeException("Unsupported property type: " + name);

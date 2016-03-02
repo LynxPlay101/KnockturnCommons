@@ -47,11 +47,15 @@ public class NamedPropertiesTest {
         assertEquals(-69, properties.defaulttest);
         assertEquals("something", properties.test2);
         assertEquals(TimeUnit.DAYS, properties.timeUnit);
+        assertEquals(false, properties.booleantest);
     }
 
     private static class TestProperties extends NamedProperties {
         @Property(value = "test")
         public int test;
+
+        @Property(value = "booleantest")
+        public boolean booleantest;
 
         @Property(value = "defaulttest", defaultvalue = "-69")
         public int defaulttest;
