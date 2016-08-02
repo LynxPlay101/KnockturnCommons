@@ -52,18 +52,18 @@ public class NamedPropertiesTest {
 
     private static class TestProperties extends NamedProperties {
         @Property(value = "test")
-        public int test;
+        int test;
 
         @Property(value = "booleantest")
-        public boolean booleantest;
+        boolean booleantest;
 
         @Property(value = "defaulttest", defaultvalue = "-69")
-        public int defaulttest;
+        int defaulttest;
 
         @Property(value = "test.2")
-        public String test2;
+        String test2;
 
         @Property(value = "time.unit", type = TimeUnit.class)
-        public TimeUnit timeUnit;
+        TimeUnit timeUnit;
     }
 }

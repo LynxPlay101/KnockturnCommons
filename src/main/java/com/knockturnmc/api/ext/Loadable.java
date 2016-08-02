@@ -21,9 +21,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
  */
 
+package com.knockturnmc.api.ext;
+
 /**
- * Provides general utilities for configurations and maps
- *
- * @since 1.8
+ * Represents a loadable object
+ * @param <T> the type of the parent object that will load this object
  */
-package com.knockturnmc.api.util;
+public interface Loadable<T> {
+
+    /**
+     * Enables the module
+     * @param parent the instance that is loading this module
+     */
+    void onEnable(T parent);
+
+    /**
+     * Disables the module
+     * @param parent the instance that is unloading this module
+     */
+    void onDisable(T parent);
+}
