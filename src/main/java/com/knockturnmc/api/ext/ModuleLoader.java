@@ -79,6 +79,15 @@ public class ModuleLoader<T> {
     }
 
     /**
+     * Gets all the modules
+     *
+     * @return the modules
+     */
+    public Map<Loadable<T>, Module> getModules() {
+        return new HashMap<>(modules);
+    }
+
+    /**
      * Loads the modules
      */
     public final void loadModules() {
