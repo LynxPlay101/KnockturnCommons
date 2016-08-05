@@ -27,6 +27,7 @@ import lombok.extern.log4j.Log4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -121,6 +122,39 @@ public class ModuleLoader<T> {
                 log.error("Failed to unload module", e);
             }
         }
+    }
+
+    /**
+     * Gets the file of the module
+     *
+     * @param module the module
+     * @return the file
+     */
+    public String getModuleFile(Loadable<T> module) {
+        URLClassLoader cl = (URLClassLoader) module.getClass().getClassLoader();
+        try {
+            return cl.getURLs()[0].toURI().getPath();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets the module directory
+     *
+     * @return module directory
+     */
+    public File getModuleDir() {
+        return moduleDir;
+    }
+
+    /**
+     * Gets the extensions that are loaded
+     *
+     * @return the extensions
+     */
+    public String getModuleExtension() {
+        return moduleExtension;
     }
 
     private void loadModule(File moduleFile) {
