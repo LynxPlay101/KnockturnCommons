@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 
 package com.knockturnmc.api.util;
 
-import com.google.gson.Gson;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,14 +35,18 @@ import java.net.URL;
  */
 public abstract class RestClient {
 
-    private Gson gson;
+    private final ContentType contentType;
+
+    protected RestClient(ContentType contentType) {
+        this.contentType = contentType;
+    }
 
     private HttpURLConnection getConnection(String path, String method) throws IOException {
         URL url = new URL(path);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(method.equals("POST"));
         connection.setRequestMethod(method);
-        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("Accept", contentType.getContentType());
         return connection;
     }
 
@@ -70,7 +72,7 @@ public abstract class RestClient {
      */
     protected String doPost(String path, String body) throws IOException {
         HttpURLConnection connection = getConnection(path, "POST");
-        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Type", contentType.getContentType());
         OutputStream stream = connection.getOutputStream();
         stream.write(body.getBytes());
         stream.flush();
@@ -88,47 +90,5 @@ public abstract class RestClient {
             sb.append(output);
         }
         return sb.toString();
-    }
-
-    /**
-     * This method must be implemented to provide a configurable Gson instance
-     *
-     * @return a non-null Gson instance
-     */
-    protected abstract Gson configureJson();
-
-    /**
-     * Gets the configured gson instance
-     *
-     * @return the gson instance
-     */
-    protected Gson getGson() {
-        if (gson == null) {
-            gson = configureJson();
-        }
-        return gson;
-    }
-
-    /**
-     * Parses a JSON object to a string
-     *
-     * @param obj the object
-     * @return the string
-     */
-    protected String toJson(Object obj) {
-
-        return getGson().toJson(obj);
-    }
-
-    /**
-     * Parses a string to JSON object
-     *
-     * @param data   the string to parse
-     * @param target the {@link Class} to parse to
-     * @param <T>    the target type
-     * @return the parsed object
-     */
-    protected <T> T fromJson(String data, Class<? extends T> target) {
-        return getGson().fromJson(data, target);
     }
 }
