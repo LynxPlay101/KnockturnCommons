@@ -24,6 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 package com.knockturnmc.api.util.sql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * Represents an SQL datasource
@@ -35,5 +36,5 @@ public interface SqlDatasource {
      *
      * @return an open connection
      */
-    Connection getConnection();
+    Connection getConnection() throws SQLException;
 }

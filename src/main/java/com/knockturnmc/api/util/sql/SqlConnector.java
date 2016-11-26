@@ -23,29 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 
 package com.knockturnmc.api.util.sql;
 
-import lombok.extern.log4j.Log4j;
-
-import java.sql.Connection;
-import java.sql.SQLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a connector that manages its own sql connection
  */
-@Log4j
-public abstract class SqlConnector implements AutoCloseable {
+public abstract class SqlConnector {
 
-    protected final Connection connection;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final SqlDatasource datasource;
 
     protected SqlConnector(SqlDatasource datasource) {
-        this.connection = datasource.getConnection();
-    }
-
-    @Override
-    public void close() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            log.error("Failed to close connection", e);
-        }
+        this.datasource = datasource;
     }
 }
