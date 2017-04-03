@@ -24,6 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 package com.knockturnmc.api.util;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -33,6 +35,8 @@ import java.util.Properties;
  * Provides utilities for loading configurations and loading mapped {@link NamedProperties}
  */
 public final class ConfigurationUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(ConfigurationUtils.class);
 
     private ConfigurationUtils() {
     }
@@ -51,14 +55,13 @@ public final class ConfigurationUtils {
         try {
             File config = getConfigFile(classLoader, file, datafolder);
             Properties props = new Properties();
-            FileInputStream stream = new FileInputStream(config);
-            props.load(stream);
-            stream.close();
+            try (FileInputStream stream = new FileInputStream(config)) {
+                props.load(stream);
+            }
             return props;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -76,18 +79,20 @@ public final class ConfigurationUtils {
         File config = new File(datafolder, file);
         datafolder.mkdirs();
         if (!config.exists()) {
-            System.out.println("No configuration file found. Copying default configuration...");
-            InputStream in = classLoader.getResourceAsStream(file);
-            if (in != null) {
-                if (!config.createNewFile())
-                    System.out.println("Failed creating default file.");
-                OutputStream out = new FileOutputStream(config);
-                IOUtils.copy(in, out);
-                in.close();
-                out.flush();
-                out.close();
-            } else {
-                config.createNewFile();
+            logger.info("No configuration file found. Copying default configuration...");
+            try (InputStream in = classLoader.getResourceAsStream(file)) {
+                if (in != null) {
+                    if (!config.createNewFile()) {
+                        logger.error("Failed creating default file.");
+                        throw new RuntimeException("Failed to create default file");
+                    }
+                    try (OutputStream out = new FileOutputStream(config)) {
+                        IOUtils.copy(in, out);
+                        out.flush();
+                    }
+                } else {
+                    config.createNewFile();
+                }
             }
         }
         return config;
@@ -148,9 +153,9 @@ public final class ConfigurationUtils {
             fos.close();
             return properties;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn("Failed to load configuration", e);
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
