@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 
 package com.knockturnmc.api.ext;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +41,7 @@ import java.util.jar.JarFile;
  *
  * @param <T> the parent instance class
  */
-@Log4j
+@Slf4j
 public class ModuleLoader<T> {
 
     private final Map<Loadable<T>, Module> modules;
