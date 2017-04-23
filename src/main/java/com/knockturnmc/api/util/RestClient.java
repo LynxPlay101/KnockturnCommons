@@ -33,20 +33,20 @@ import java.net.URL;
 /**
  * This class provides the tools to communicate with a JSON RESTful Service
  */
-public abstract class RestClient {
+public class RestClient {
 
-    private final ContentType contentType;
+    private final String contentType;
 
-    protected RestClient(ContentType contentType) {
+    protected RestClient(String contentType) {
         this.contentType = contentType;
     }
 
-    private HttpURLConnection getConnection(String path, String method) throws IOException {
+    protected HttpURLConnection getConnection(String path, String method) throws IOException {
         URL url = new URL(path);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(method.equals("POST"));
         connection.setRequestMethod(method);
-        connection.setRequestProperty("Accept", contentType.getContentType());
+        connection.setRequestProperty("Accept", contentType);
         return connection;
     }
 
@@ -57,7 +57,7 @@ public abstract class RestClient {
      * @return the response
      * @throws IOException if the connection failed
      */
-    protected String doGet(String path) throws IOException {
+    public String doGet(String path) throws IOException {
         HttpURLConnection connection = getConnection(path, "GET");
         return getResponse(connection);
     }
@@ -70,9 +70,9 @@ public abstract class RestClient {
      * @return the response
      * @throws IOException if the connection failed
      */
-    protected String doPost(String path, String body) throws IOException {
+    public String doPost(String path, String body) throws IOException {
         HttpURLConnection connection = getConnection(path, "POST");
-        connection.setRequestProperty("Content-Type", contentType.getContentType());
+        connection.setRequestProperty("Content-Type", contentType);
         OutputStream stream = connection.getOutputStream();
         stream.write(body.getBytes());
         stream.flush();
@@ -80,7 +80,7 @@ public abstract class RestClient {
         return getResponse(connection);
     }
 
-    private String getResponse(HttpURLConnection connection) throws IOException {
+    protected String getResponse(HttpURLConnection connection) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
         String output;
