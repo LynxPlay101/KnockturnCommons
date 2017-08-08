@@ -48,6 +48,7 @@ public class NamedPropertiesTest {
         assertEquals("something", properties.test2);
         assertEquals(TimeUnit.DAYS, properties.timeUnit);
         assertEquals(false, properties.booleantest);
+        assertEquals(31231232L, properties.someLong);
     }
 
     private static class TestProperties extends NamedProperties {
@@ -65,5 +66,8 @@ public class NamedPropertiesTest {
 
         @Property(value = "time.unit", type = TimeUnit.class)
         TimeUnit timeUnit;
+
+        @Property(value = "some.long", defaultvalue = "31231232")
+        long someLong;
     }
 }

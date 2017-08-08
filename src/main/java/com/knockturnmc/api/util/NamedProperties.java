@@ -97,9 +97,18 @@ public abstract class NamedProperties extends Properties {
                         try {
                             value = Integer.parseInt(Objects.equals(val, "") ? "0" : val);
                         } catch (NumberFormatException e) {
-                            throw new RuntimeException("Invalid value for field " + property.value());
+                            throw new RuntimeException("Invalid integer for field " + property.value() + "=" + val);
                         }
                         field.setInt(instance, value);
+                        break;
+                    case "long":
+                        long longValue;
+                        try {
+                            longValue = Long.parseLong(Objects.equals(val, "") ? "0" : val);
+                        } catch (NumberFormatException e) {
+                            throw new RuntimeException("Invalid long for field " + property.value() + "=" + val);
+                        }
+                        field.setLong(instance, longValue);
                         break;
                     case "java.lang.String":
                         field.set(instance, val);
