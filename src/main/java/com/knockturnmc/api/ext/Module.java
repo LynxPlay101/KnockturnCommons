@@ -30,6 +30,7 @@ import java.lang.annotation.Target;
 
 /**
  * Represents a module that can be loaded can use to extend the base of an application
+ *
  * @see Loadable
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -38,13 +39,22 @@ public @interface Module {
 
     /**
      * The name of the module
+     *
      * @return the name
      */
     String name();
 
     /**
      * The author of the module
+     *
      * @return the author
      */
     String author();
+
+    /**
+     * Specifies if this module is reloadable
+     *
+     * @return reloadable
+     */
+    boolean reloadable() default true;
 }
