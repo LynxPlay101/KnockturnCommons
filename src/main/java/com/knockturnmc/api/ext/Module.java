@@ -57,4 +57,10 @@ public @interface Module {
      * @return reloadable
      */
     boolean reloadable() default true;
+
+    /**
+     * Specifies the version of this module
+     * @return the version
+     */
+    String version() default "";
 }
